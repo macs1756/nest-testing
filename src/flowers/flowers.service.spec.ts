@@ -40,6 +40,7 @@ describe('FlowersService', () => {
     ...createFlowerDto,
     created_at: new Date(),
     updated_at: new Date(),
+    bunchId: 1,
   };
   // END DATA
 

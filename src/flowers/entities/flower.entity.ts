@@ -1,7 +1,10 @@
+import { Bunch } from 'src/bunches/entities/bunch.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -22,4 +25,9 @@ export class Flower {
 
   @Column()
   name: string;
+
+  @ManyToOne(() => Bunch, (bunch) => bunch.flowers)
+  @JoinColumn({ name: 'bunchId' })
+  @Column()
+  bunchId: number;
 }
