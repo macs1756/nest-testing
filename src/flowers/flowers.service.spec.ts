@@ -29,40 +29,46 @@ describe('FlowersService', () => {
     );
   });
 
+  // DATA
+  const createFlowerDto: CreateFlowerDto = {
+    name: 'Rose',
+    price: 10,
+  };
+
+  const savedFlower: Flower = {
+    id: 1,
+    ...createFlowerDto,
+    created_at: new Date(),
+    updated_at: new Date(),
+  };
+  // END DATA
+
   it('should be defined', () => {
     expect(service).toBeDefined();
   });
 
-  it('should create and return a flower', async () => {
-    const createFlowerDto: CreateFlowerDto = {
-      name: 'Rose',
-      price: 10,
-    };
-
-    const savedFlower: Flower = {
-      id: 1,
-      ...createFlowerDto,
-      created_at: new Date(),
-      updated_at: new Date(),
-    };
-
-    //bind method save
+  it('should create and save a flower in repository', async () => {
     jest.spyOn(flowerRepository, 'save').mockResolvedValue(savedFlower);
 
     const result = await service.create(createFlowerDto);
 
-    // 1
     expect(result).toEqual(savedFlower);
 
-    // 2
     expect(flowerRepository.create).toHaveBeenCalledWith(
-      expect.objectContaining({
-        name: 'Rose',
-        price: 10,
-      }),
+      expect.objectContaining(createFlowerDto),
     );
+  });
 
-    //
+  it('should create and return new flower in service', async () => {
+    jest.spyOn(service, 'create').mockResolvedValue(savedFlower);
+
+    const resCreatedViaService = await service.create(createFlowerDto);
+
+    expect(resCreatedViaService).toEqual(savedFlower);
+
+    expect(service.create).toHaveBeenCalledWith(
+      expect.objectContaining(createFlowerDto),
+    );
   });
 
   // it('should throw an error if flower creation fails', async () => {
